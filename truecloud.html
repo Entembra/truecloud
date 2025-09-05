@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TrueCloud — Retro Futuristic Audio Community</title>
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --accent:#ff7a00;
+  --accent-2:#ffb157;
+  --bg-light:#fbfcfd;
+  --bg-dark:#081018;
+  --card-dark: linear-gradient(180deg, rgba(12,16,24,0.6), rgba(6,8,12,0.5));
+  --glass-1: rgba(255,255,255,0.06);
+  --glass-2: rgba(255,255,255,0.10);
+  --muted-light:#9aa3ad;
+  --muted-dark:#9fb0c4;
+  --neon: rgba(255,122,0,0.14);
+  --radius:12px;
+  --shadow-1: 0 10px 30px rgba(2,6,12,0.6);
+  --shadow-soft: 0 6px 18px rgba(0,0,0,0.4);
+  --glass-border: rgba(255,255,255,0.06);
+  --logo-text:#00000;
+  font-family:"Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Base layout */
+html,body{height:100%;margin:0;background:var(--bg-dark);color:#e6eef6;-webkit-font-smoothing:antialiased;}
+body.light{ background: var(--bg-light); color:#111; }
+
+.topbar{
+  display:flex;align-items:center;gap:14px;padding:14px 22px;
+  background: linear-gradient(180deg, rgba(6,10,14,0.6), rgba(6,10,14,0.5));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(8px) saturate(140%);
+}
+body.light .topbar{
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(250,250,250,0.6));
+  box-shadow: 0 10px 30px rgba(12,18,30,0.06);
+}
+
+.logo{display:flex;align-items:center;gap:12px}
+.mark{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.06)}
+body.light .mark{box-shadow: 0 8px 24px rgba(12,18,30,0.06);border:1px solid rgba(255,255,255,0.28)}
+
+.searchbar{margin-left:18px;flex:1;display:flex}
+.searchbar input{
+  width:100%;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: inset 0 2px 8px rgba(255,255,255,0.02);
+  font-size:14px;color:var(--muted-dark);
+}
+body.light .searchbar input{ color:#222; background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,250,0.8)); box-shadow: inset 0 2px 8px rgba(255,255,255,0.6); }
+
+.top-actions{display:flex;gap:12px;align-items:center}
+.btn{
+  background: linear-gradient(180deg, rgba(12,12,14,0.92), rgba(18,18,20,0.96));
+  color: #fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  position:relative;
+}
+.btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.6); background: linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; }
+
+.btn.glint::after{
+  content:'';position:absolute;width:60px;height:60px;left:-20px;top:-20px;pointer-events:none;opacity:0;transform:rotate(25deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.0));
+  filter: blur(8px);
+}
+.btn.glint:hover::after{ animation:glint 0.9s ease forwards; opacity:1; }
+
+@keyframes glint{
+  0%{ transform:translateX(-40px) rotate(25deg) scale(0.6); opacity:0; }
+  20%{ opacity:1; }
+  100%{ transform:translateX(120px) rotate(25deg) scale(1); opacity:0; }
+}
+
+/* layout containers */
+.container{max-width:1120px;margin:28px auto;padding:0 18px}
+.grid{display:flex;gap:20px}
+.main{flex:2}
+.side{flex:1;max-width:320px}
+
+/* cards */
+.card{
+  border-radius:var(--radius);
+  padding:14px;
+  background: rgba(8,12,18,0.44);
+  backdrop-filter: blur(8px) saturate(120%);
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 8px 30px rgba(1,6,12,0.6);
+}
+body.light .card{ background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,249,250,0.9)); border:1px solid rgba(255,255,255,0.6); box-shadow: 0 10px 30px rgba(12,18,30,0.06);}
+
+/* tracks */
+.track{
+  display:flex;gap:14px;align-items:center;padding:12px;border-radius:14px;margin-bottom:12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 10px 30px rgba(2,6,12,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+body.light .track{ background: linear-gradient(180deg,#fff,#f7f8fa); border:1px solid rgba(240,240,240,0.95); box-shadow: 0 6px 18px rgba(12,18,30,0.04); }
+
+.thumb{
+  width:76px;height:76px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;
+  box-shadow: 0 12px 36px rgba(255,122,0,0.12), inset 0 -6px 14px rgba(255,255,255,0.05);
+  position:relative; overflow:hidden;
+}
+.thumb::after{
+  content:'';position:absolute;left:-40%;top:-30%;width:120%;height:60%;transform:rotate(-18deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), rgba(255,255,255,0.05), rgba(255,255,255,0));
+  filter: blur(6px); opacity:0.0; transition:opacity .22s ease, transform .5s ease;
+}
+.thumb:hover::after{ opacity:0.85; transform:translateX(8px) rotate(-18deg); }
+
+/* meta */
+.meta{flex:1}
+.title{font-weight:800;font-size:15px;color:var(--logo-text)}
+.small{font-size:13px;color:var(--muted-dark);}
+
+/* badges & pills */
+.pill{padding:6px 10px;border-radius:18px;background:linear-gradient(180deg,#111,#151515);color:#fff;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+body.light .pill{ background: linear-gradient(180deg,#111,#222); }
+
+/* upload area */
+.upload-area{
+  border-radius:12px;padding:16px; margin-top:6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5), inset 0 2px 10px rgba(255,255,255,0.02);
+}
+body.light .upload-area{ background: linear-gradient(180deg,#fff,#f7f8fa); border:1px solid rgba(230,230,230,0.9); box-shadow: 0 10px 30px rgba(12,18,30,0.06); }
+label.field{display:block;margin-top:12px;font-weight:700;color:var(--muted-dark)}
+body.light label.field{ color:#333; }
+
+.btn-primary{
+  background: linear-gradient(180deg,#0d0d0d,#131313); color:#fff;border-radius:12px;padding:10px 14px;border:0;cursor:pointer;box-shadow:0 12px 36px rgba(0,0,0,0.5);
+}
+.btn-primary:hover{ background: linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; transform: translateY(-2px); }
+
+/* avatar */
+.avatar{width:72px;height:72px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:inline-block;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow: 0 12px 36px rgba(0,0,0,0.4)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* nav tabs */
+.nav-tabs{display:flex;gap:8px;margin-bottom:12px}
+.nav-tabs a{padding:8px 12px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted-dark);text-decoration:none}
+.nav-tabs a.active{background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); color:var(--logo-text)}
+
+/* modal */
+#comments-modal, #tos-modal{display:none;position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,10,0.6), rgba(2,6,10,0.6));align-items:center;justify-content:center;padding:18px;z-index:80}
+#comments-modal > div, #tos-modal > div{border-radius:14px;padding:16px;background: linear-gradient(180deg, rgba(6,8,10,0.9), rgba(4,6,8,0.85));box-shadow: 0 30px 80px rgba(0,0,0,0.8);max-width:100%}
+body.light #comments-modal > div, body.light #tos-modal > div{ background:#fff; box-shadow: 0 24px 60px rgba(12,18,30,0.12); color:#111; }
+
+/* glint animation helper for small thumbnails on hover */
+.glint-shine{
+  position:relative; overflow:hidden;
+}
+.glint-shine::before{
+  content:''; position:absolute; left:-40%; top:-30%; width:140%; height:60%; transform:rotate(-18deg); background: linear-gradient(90deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05), rgba(255,255,255,0));
+  filter: blur(6px); opacity:0; transition:opacity .22s ease, transform .5s ease;
+}
+.glint-shine:hover::before{ opacity:0.95; transform:translateX(8px) rotate(-18deg); }
+
+/* neon glow on interactive elements */
+.btn.neon{ box-shadow: 0 8px 36px rgba(255,122,0,0.18), inset 0 -2px 6px rgba(255,255,255,0.03); }
+body.light .btn.neon{ box-shadow: 0 8px 36px rgba(255,122,0,0.12); }
+
+/* small utilities */
+.muted{ color: var(--muted-dark); }
+.small{ font-size:13px; color:var(--muted-dark); }
+.footer{ margin-top:18px; text-align:center; color:var(--muted-dark) }
+
+/* responsive */
+@media (max-width:900px){
+  .grid{flex-direction:column}
+  .side{max-width:none}
+  .searchbar{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="mark" id="logo-mark" title="TrueCloud">
+      <!-- Glossy SVG logo -->
+      <svg width="42" height="42" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ffd2b0"/>
+            <stop offset="60%" stop-color="#ff8a00"/>
+            <stop offset="100%" stop-color="#ff6a00"/>
+          </linearGradient>
+          <linearGradient id="glint" x1="0" x2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0.0)"/>
+          </linearGradient>
+          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect x="4" y="4" width="56" height="56" rx="10" fill="url(#g1)" filter="url(#softGlow)"/>
+        <g transform="translate(8,8) scale(0.84)">
+          <path d="M12 10 L28 10 C34 10 38 14 38 20 C38 26 34 30 28 30 L18 30 L18 44" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+        </g>
+        <rect x="6" y="6" width="52" height="18" rx="9" fill="url(#glint)" opacity="0.35" />
+      </svg>
+    </div>
+    <div style="color:var(--logo-text);font-weight:800;font-size:18px;margin-left:8px">TrueCloud</div>
+    <button id="dark-toggle" class="btn" title="Toggle theme" style="margin-left:12px;padding:8px 10px;font-size:13px">Light</button>
+  </div>
+
+  <div class="searchbar"><input id="q" placeholder="Search tracks, users..." /></div>
+  <div class="top-actions">
+    <button class="btn" id="btn-new-upload">Upload</button>
+    <div id="auth-area"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <main class="main">
+      <div class="card" id="upload-card" style="display:none">
+        <h3>Upload Track</h3>
+        <div class="upload-area">
+          <div class="muted">Rules: MP3 only, &lt; 10 MB. No copyrighted or explicit material.</div>
+          <label class="field">Title<input id="upload-title" placeholder="Track title" /></label>
+          <label class="field">Description<input id="upload-desc" placeholder="Short description" /></label>
+          <label class="field">File<input id="upload-file" type="file" accept=".mp3,audio/mpeg" /></label>
+          <div style="margin-top:10px">
+            <button class="btn-primary" id="do-upload">Start Upload</button>
+            <button class="btn" id="cancel-upload">Cancel</button>
+          </div>
+          <div id="upload-msg" class="muted" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <div id="tracks-list"></div>
+    </main>
+
+    <aside class="side">
+      <div class="card" id="me-card">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="avatar" id="me-avatar"><img src="" alt="" style="display:none"/></div>
+          <div>
+            <div id="me-name">Not signed in</div>
+            <div class="muted" id="me-join">Join to upload and comment</div>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="nav-tabs">
+            <a href="#" class="active" data-view="feed">Feed</a>
+            <a href="#" data-view="my">My Tracks</a>
+            <a href="#" data-view="liked">Liked</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4>Newbie limits</h4>
+        <div class="small">New users: max <strong>10 tracks</strong>, MP3 only, each &lt; 15MB. After <strong>2 months</strong> users gain <strong>Trusted</strong> badge and unlimited uploads.</div>
+      </div>
+
+      <div class="card">
+        <h4>About</h4>
+        <div class="muted">Truecloud is a retro-futuristic audio platform designed to be a easy-to-use and simple alternative to algorithm-driven platforms. Truecloud works similar to traditional forum websites, no AI, no algorithms, just people making music.</div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <a href="#tos" id="link-tos">Terms of Service</a> — Copyright © 2025 Entembra. All rights reserved.
+  </footer>
+</div>
+
+<!-- Comments Modal -->
+<div id="comments-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+  <div style="width:520px;background:#fff;border-radius:10px;padding:12px;max-height:80vh;overflow:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>Comments</strong>
+      <button id="close-comments" class="btn">Close</button>
+    </div>
+    <div id="comments-list" style="margin-top:8px"></div>
+    <div style="margin-top:8px">
+      <textarea id="comment-text" placeholder="Write a comment..." style="width:100%;height:72px"></textarea>
+      <div style="margin-top:6px;display:flex;gap:6px;justify-content:flex-end">
+        <button id="post-comment" class="btn-primary">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ToS modal -->
+<div id="tos-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+  <div style="width:800px;background:#fff;border-radius:10px;padding:18px;max-height:85vh;overflow:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>TrueCloud Terms of Service</strong>
+      <button id="close-tos" class="btn">Close</button>
+    </div>
+    <div style="margin-top:12px">
+      <h3>Upload Process & Rules</h3>
+      <p>By uploading you agree to these rules:</p>
+      <ul>
+        <li>Only upload audio you own or have the right to distribute. Do not upload someone else's work without permission.</li>
+        <li>No explicit or pornographic material. Files that violate this will be removed and accounts may be suspended.</li>
+        <li>Acceptable file type: <strong>MP3</strong>. Max file size for newbies: <strong>10 MB</strong>.</li>
+        <li>New users can upload up to <strong>10 tracks</strong>. After 2 months from account creation the user receives a <strong>Trusted</strong> badge and upload limits are lifted.</li>
+        <li>Tracks are stored on configured storage and may be proxied by Cloudflare Workers for streaming. We recommend you keep backups of original files.</li>
+      </ul>
+
+      <h4>Upload flow (how it works)</h4>
+      <ol>
+        <li>User selects MP3 file and fills metadata (title, description).</li>
+        <li>Client validates file type and size. If OK, client requests an upload URL from the backend Worker (/api/get-upload-url) OR uses OAuth direct-upload to a cloud drive if configured.</li>
+        <li>File is uploaded directly to the storage (Cloudflare R2 or user drive). The backend receives the storage URL and stores track metadata in Cloudflare KV or D1.</li>
+        <li>Once metadata is stored, the new track appears on the front page and user profile. Worker serves streaming via /stream/{trackId}, supporting Range requests and edge caching.</li>
+      </ol>
+
+      <h4>Enforcement</h4>
+      <p>Content flagged as infringing or explicit may be removed. Repeat violations can result in suspension.</p>
+
+      <h4>Contact</h4>
+      <p>For takedown requests provide proof of ownership and the track URL in our Discord community. <a href="https://discord.gg/zgENtFB3">https://discord.gg/zgENtFB3</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  TrueCloud SPA (frontend)
+  - Configuration: set API_BASE to your Worker domain.
+  - Two upload modes:
+     MODE = "USER_DRIVE_OAUTH" -> upload to user's Google Drive via client-side Drive API using OAUTH_CLIENT_ID
+     MODE = "SIGNED_CLOUDFLARE" -> client asks backend for signed upload URL (/api/get-upload-url) then PUTs the file
+  - This SPA expects backend endpoints:
+     GET  /api/me               -> returns {user|null}
+     POST /api/auth/request     -> { email } -> returns {ok: true} (magic link flow)
+     POST /api/auth/complete    -> {token} -> returns {user}
+     GET  /api/tracks           -> list of tracks
+     POST /api/tracks           -> create metadata (requires storage_url)
+     GET  /api/track/:id        -> track metadata
+     POST /api/track/:id/like
+     POST /api/track/:id/comment {text}
+     POST /api/track/:id/share
+     GET  /api/get-upload-url   -> returns { uploadUrl, storagePath }  (for SIGNED_CLOUDFLARE mode)
+     POST /api/subscribe/:userid
+     GET  /stream/:trackId      -> proxied stream (handled by Worker)
+  - Minimal client-side persistence uses localStorage for auth token.
+*/
+
+const CONFIG = {
+  API_BASE: '/', // set to your worker domain, e.g. "https://truecloud.example.com"
+  UPLOAD_MODE: 'SIGNED_CLOUDFLARE', // or 'USER_DRIVE_OAUTH'
+  OAUTH_CLIENT_ID: '', // required for USER_DRIVE_OAUTH mode (Google Drive)
+  NEWBIE_LIMIT: 10,
+  NEWBIE_DAYS: 60
+};
+
+let state = {
+  user: null,
+  tracks: [],
+  viewingTrack: null,
+  commentsFor: null
+};
+
+/* ---------- helper: API calls ---------- */
+async function api(path, opts){
+  opts = opts || {};
+  const token = localStorage.getItem('tc_token');
+  opts.headers = opts.headers || {};
+  if (token) opts.headers['Authorization'] = 'Bearer '+token;
+  const res = await fetch(CONFIG.API_BASE + path, opts);
+  if (res.status === 401){ logout(); throw new Error('unauthorized'); }
+  try { return await res.json(); } catch(e){ return {}; }
+}
+
+/* ---------- Auth UI & flows (simple) ---------- */
+function renderAuthArea(){
+  const node = document.getElementById('auth-area');
+  node.innerHTML = '';
+  if (!state.user){
+    const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Sign In'; btn.onclick=showSignIn;
+    node.appendChild(btn);
+  } else {
+    const wrap = document.createElement('div'); wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='8px';
+    const badge = document.createElement('div'); badge.className='pill'; badge.textContent = state.user.trusted ? 'Trusted' : 'Newbie';
+    const name = document.createElement('div'); name.textContent = state.user.display_name || 'You';
+    const menu = document.createElement('div'); menu.style.position='relative';
+    const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Account';
+    btn.onclick = () => showAccountMenu();
+    menu.appendChild(btn);
+    wrap.appendChild(badge); wrap.appendChild(name); wrap.appendChild(menu);
+    node.appendChild(wrap);
+  }
+}
+
+function showSignIn(){
+  const email = prompt('Enter email for magic link (demo):');
+  if (!email) return;
+  const demoToken = btoa(email + '|' + Date.now());
+  localStorage.setItem('tc_token', demoToken);
+  state.user = { id: 'u_'+hash(email), display_name: email.split('@')[0], email_hash: hash(email), created_at: new Date().toISOString(), avatar_url:'', trusted:false };
+  renderAll();
+}
+
+function logout(){
+  localStorage.removeItem('tc_token'); state.user = null; renderAll();
+}
+
+function showAccountMenu(){
+  const name = prompt('Change display name', state.user.display_name || '');
+  if (name !== null){ state.user.display_name = name; renderAll(); api('/api/me', {method:'POST', body:JSON.stringify({display_name:name}), headers:{'Content-Type':'application/json'}}).catch(()=>{});}
+}
+
+/* ---------- Utilities ---------- */
+function hash(s){ let h=0; for(let i=0;i<s.length;i++)h=(h<<5)-h + s.charCodeAt(i)|0; return Math.abs(h).toString(36); }
+function fmtCount(n){ if (n>999) return (n/1000).toFixed(1)+'k'; return ''+n; }
+function nowISO(){ return new Date().toISOString(); }
+
+/* ---------- Tracks: render & actions ---------- */
+async function loadTracks(){
+  try{
+    const data = await api('/api/tracks');
+    state.tracks = data.tracks || JSON.parse(localStorage.getItem('tc_demo_tracks')||'[]');
+  }catch(e){
+    console.warn('load tracks failed, using local demo list');
+    state.tracks = JSON.parse(localStorage.getItem('tc_demo_tracks')||'[]');
+  }
+  renderTracks();
+}
+
+function renderTracks(){
+  const container = document.getElementById('tracks-list'); container.innerHTML='';
+  state.tracks.forEach(t=>{
+    const el = document.createElement('div'); el.className='card';
+    el.innerHTML = `
+      <div class="track">
+        <div class="thumb">${t.title.charAt(0).toUpperCase()}</div>
+        <div class="meta">
+          <div class="title">${escapeHtml(t.title)}</div>
+          <div class="small">${escapeHtml(t.user_display || 'unknown')} · ${t.duration||'00:00'}</div>
+          <div style="margin-top:6px" class="small">Plays: <strong>${t.plays||0}</strong> · Likes: <strong>${t.likes||0}</strong> · Shares: <strong>${t.shares||0}</strong></div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="playTrack('${t.id}')">Play</button>
+          <button class="btn" onclick="likeTrack('${t.id}')">♥</button>
+          <button class="btn" onclick="openComments('${t.id}')">💬</button>
+          <button class="btn" onclick="shareTrack('${t.id}')">Share</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+/* ---------- Playback (stream via Worker endpoint) ---------- */
+async function playTrack(id){
+  const t = state.tracks.find(x=>x.id===id); if(!t) return;
+  t.plays = (t.plays||0)+1; renderTracks();
+  const src = CONFIG.API_BASE + 'stream/' + id;
+  const audio = new Audio(src);
+  audio.play().catch(()=>alert('Playback failed (CORS or worker not configured).'));
+  api('/api/track/'+id+'/play', {method:'POST'}).catch(()=>{});
+}
+
+/* ---------- Like / Share / Comment ---------- */
+function likeTrack(id){
+  const t = state.tracks.find(x=>x.id===id); if(!t) return;
+  t.likes = (t.likes||0)+1; renderTracks();
+  api('/api/track/'+id+'/like', {method:'POST'}).catch(()=>{});
+}
+
+function shareTrack(id){
+  const url = location.origin + '/t/' + id;
+  navigator.clipboard?.writeText(url).then(()=> {
+    const t = state.tracks.find(x=>x.id===id); if(t){ t.shares=(t.shares||0)+1; renderTracks(); }
+    api('/api/track/'+id+'/share', {method:'POST'}).catch(()=>{});
+    alert('Track URL copied to clipboard');
+  }).catch(()=>alert('Clipboard failed - here is the link: '+url));
+}
+
+async function openComments(id){
+  state.commentsFor = id;
+  const modal = document.getElementById('comments-modal'); const list = document.getElementById('comments-list'); list.innerHTML='Loading...';
+  modal.style.display='flex';
+  try{
+    const res = await api('/api/track/'+id);
+    list.innerHTML = '';
+    (res.comments||[]).forEach(c=>{
+      const d = document.createElement('div'); d.style.borderBottom='1px solid #eee'; d.style.padding='8px 0';
+      d.innerHTML = `<div style="font-weight:700">${escapeHtml(c.user_display||'anon')}</div><div class="small">${escapeHtml(c.text)}</div><div class="muted small">${new Date(c.created_at).toLocaleString()}</div>`;
+      list.appendChild(d);
+    });
+  }catch(e){ list.innerHTML='Failed to load comments'; }
+}
+
+document.getElementById('close-comments').onclick=()=>{ document.getElementById('comments-modal').style.display='none'; }
+document.getElementById('post-comment').onclick=async ()=>{
+  const text = document.getElementById('comment-text').value.trim(); if(!text) return alert('Comment empty');
+  if(!state.user) return alert('Sign in to comment');
+  const id = state.commentsFor;
+  await api('/api/track/'+id+'/comment', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text})});
+  document.getElementById('comment-text').value=''; openComments(id);
+};
+
+/* ---------- Upload flow (two modes) ---------- */
+document.getElementById('btn-new-upload').onclick = ()=>{
+  if(!state.user){ alert('Sign in to upload'); return; }
+  document.getElementById('upload-card').style.display='block';
+};
+document.getElementById('cancel-upload').onclick = ()=> document.getElementById('upload-card').style.display='none';
+
+document.getElementById('do-upload').onclick = async ()=>{
+  const fileInput = document.getElementById('upload-file');
+  const title = document.getElementById('upload-title').value.trim() || 'Untitled';
+  const desc = document.getElementById('upload-desc').value.trim() || '';
+  if (!fileInput.files.length) return alert('Choose a file');
+  const f = fileInput.files[0];
+  if (f.type !== 'audio/mpeg' && !f.name.toLowerCase().endsWith('.mp3')) return alert('Only MP3 allowed');
+  if (f.size > 10*1024*1024 && !isTrusted(state.user)) return alert('File too large for newbies (<15 MB)');
+  const userTracks = state.tracks.filter(t=>t.user_id===state.user.id).length;
+  if (!isTrusted(state.user) && userTracks >= CONFIG.NEWBIE_LIMIT) return alert('Newbie upload limit reached (10 tracks). Wait for trusted badge.');
+
+  document.getElementById('upload-msg').textContent = 'Preparing upload...';
+  try{
+    let storageUrl = '';
+    if (CONFIG.UPLOAD_MODE === 'USER_DRIVE_OAUTH'){
+      storageUrl = await uploadToGoogleDriveClient(f, title);
+    } else {
+      const u = await api('/api/get-upload-url');
+      await uploadToSignedUrl(u.uploadUrl, f);
+      storageUrl = u.storagePath;
+    }
+
+    const meta = {
+      title, description: desc, audio_url: storageUrl, thumbnail_url: '', duration: formatDuration(0),
+      user_id: state.user.id, user_display: state.user.display_name, created_at: nowISO()
+    };
+    const res = await api('/api/tracks', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(meta)});
+    state.tracks.unshift(res.track || Object.assign({id:'t_'+hash(title+Date.now()), plays:0, likes:0, shares:0},meta));
+    localStorage.setItem('tc_demo_tracks', JSON.stringify(state.tracks));
+    renderTracks();
+    document.getElementById('upload-msg').textContent = 'Upload complete!';
+    setTimeout(()=>{ document.getElementById('upload-card').style.display='none'; document.getElementById('upload-msg').textContent=''; }, 900);
+  }catch(err){
+    console.error(err);
+    document.getElementById('upload-msg').textContent = 'Upload failed: '+err.message;
+  }
+};
+
+function isTrusted(u){
+  if(!u) return false;
+  const created = new Date(u.created_at||0);
+  const diffDays = (Date.now() - created.getTime())/ (1000*60*60*24);
+  return diffDays >= CONFIG.NEWBIE_DAYS;
+}
+
+function formatDuration(s){ return s; }
+
+/* ---------- Upload helpers (plug & play) ---------- */
+async function uploadToSignedUrl(uploadUrl, file){
+  const res = await fetch(uploadUrl, { method: 'PUT', body: file, headers: {'Content-Type': 'audio/mpeg'} });
+  if (!res.ok) throw new Error('Upload failed: '+res.status);
+  return true;
+}
+
+async function uploadToGoogleDriveClient(file, title){
+  if (!CONFIG.OAUTH_CLIENT_ID) throw new Error('Google Drive client ID not configured for USER_DRIVE_OAUTH mode.');
+  throw new Error('Google Drive upload mode not implemented in demo. Configure CLOUD mode or implement OAuth upload.');
+}
+
+/* ---------- Misc UI ---------- */
+document.getElementById('link-tos').onclick = (e)=>{ e.preventDefault(); document.getElementById('tos-modal').style.display='flex'; };
+document.getElementById('close-tos').onclick = ()=>{ document.getElementById('tos-modal').style.display='none'; };
+
+/* ---------- Init ---------- */
+async function renderAll(){
+  renderAuthArea();
+  await loadTracks();
+  const meName = document.getElementById('me-name'); const meJoin = document.getElementById('me-join'); const meAvatar = document.getElementById('me-avatar');
+  if (state.user){
+    meName.textContent = state.user.display_name || 'User';
+    meJoin.textContent = 'Joined '+(new Date(state.user.created_at).toLocaleDateString());
+    if (state.user.avatar_url){ meAvatar.innerHTML = `<img src="${state.user.avatar_url}" />`; } else meAvatar.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:72px;color:#333">${state.user.display_name?state.user.display_name.charAt(0).toUpperCase():'U'}</div>`;
+    document.getElementById('btn-new-upload').disabled = false;
+  } else {
+    meName.textContent = 'Not signed in'; meJoin.textContent = 'Join to upload and comment'; meAvatar.innerHTML = '';
+    document.getElementById('btn-new-upload').disabled = true;
+  }
+}
+
+(async ()=>{ await renderAll(); })();
+</script>
+
+<script>
+  // Theme: default light ON (dark off)
+  (function(){
+    const body = document.body;
+    body.classList.add('light');
+
+    const t = document.getElementById('dark-toggle');
+    function updateToggleLabel(){
+      t.textContent = body.classList.contains('light') ? 'Light' : 'Dark';
+    }
+    t.onclick = ()=>{
+      body.classList.toggle('light');
+      document.documentElement.style.transition = 'background-color .25s ease,color .25s ease';
+      updateToggleLabel();
+    };
+    updateToggleLabel();
+
+    function addGlints(){
+      document.querySelectorAll('.btn').forEach(b=>b.classList.add('glint'));
+      document.querySelectorAll('.thumb').forEach(t=>t.classList.add('glint-shine'));
+      document.querySelectorAll('.btn').forEach(b=>b.classList.add('neon'));
+    }
+    addGlints();
+
+    const logo = document.getElementById('logo-mark');
+    if (logo){
+      logo.style.transition='transform .16s ease';
+      logo.onmouseenter = ()=> logo.style.transform='translateY(-3px) scale(1.02)';
+      logo.onmouseleave = ()=> logo.style.transform='translateY(0) scale(1)';
+    }
+  })();
+</script>
+</body>
+</html>
